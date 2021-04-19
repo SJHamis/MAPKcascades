@@ -1,0 +1,162 @@
+close all
+clear all
+
+%Add a path to the directory that contains the model details
+dae_location = strcat(pwd,'/auxiliary_files_model_setup');
+addpath(dae_location);
+
+M = eye(36);
+super_compound_list_index=get_conslaw_position();
+%Substitute in cons. laws 
+for i=1:size(M,1)
+    if(ismember(i,super_compound_list_index))
+        M(i,i)=0; 
+    end
+end
+
+% Set non-changing inital conditions
+MEK_tot=1.2;
+ERK_tot=1.2;
+phosph1_tot=0.0003;
+phosph2_tot=0.12;
+y0=zeros(size(M,1),1);
+y0(4)=MEK_tot;
+y0(20)=ERK_tot; 
+y0(12)=phosph1_tot;
+y0(27)=phosph2_tot;
+TMT_tot=0;
+y0(30)=TMT_tot;
+TMT_in=TMT_tot;
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+options = odeset('Mass',M,'MassSingular','yes', 'RelTol',1e-4,'AbsTol',1e-4);
+set(gcf,'position',[100,100,1000,600])
+newcolors = {'#008000',' #FFC300 ', '#FF5733 ','#C70039','#900C3F','#581845','#000000','#DAF7A6'};
+colororder(newcolors)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% dbfdose (in microM)
+dbfdose = linspace(0,1.9246,100);
+% create a response vector 
+%dbfresponse=zeros(1,length(dbfdose));
+
+setEndTime=3600*[12:6:36]; %1
+setBRAF=0.003*[0.2:0.4:1.8]; %0.1
+setATP=1000*[0.2:0.4:1.8];
+
+resultMatrix = zeros(length(setEndTime)*length(setBRAF)*length(setATP), 4);
+
+data=[137.3913043478261, 62.32365145228215
+177.97101449275362, 50.0414937759336
+206.95652173913044, 19.170124481327804
+404.05797101449275, 11.203319502074692
+559.4202898550725, 6.721991701244804
+573.3333333333333, 20
+724.0579710144928, 10.871369294605813
+906.086956521739, 13.360995850622416];
+xdata = data(:,1)/(0.001*519.6*1000);
+ydata = data(:,2)/100;
+
+rmse_xcheckpoints = zeros(length(xdata),1);
+for i = 1:length(xdata)
+   % ix = find(a>4,1)
+   rmse_xcheckpoints(i)=find(dbfdose > xdata(i), 1);
+end
+
+rmsematrix=zeros(length(xdata),3);
+rmsematrix(:,1)=xdata;
+
+for dx = 1:length(rmse_xcheckpoints)
+    rmsematrix(dx,2)=dbfdose( rmse_xcheckpoints(dx)-1) ;
+    rmsematrix(dx,3)=dbfdose( rmse_xcheckpoints(dx)) ;
+end
+
+% 
+mrow=1;
+for vT = 1:length(setEndTime)
+    tspan = [0 setEndTime(vT)];
+
+    for vB = 1:length(setBRAF)
+        BRAF_tot=setBRAF(vB);
+        y0(1)=BRAF_tot;
+
+        for vA =1:length(setATP) 
+            ATP_tot=setATP(vA);        
+            y0(2)=ATP_tot;
+
+            for d = 1:length(dbfdose)
+                DBF_in=dbfdose(d);
+                y0(15)=DBF_in; 
+                [t,y] = ode15s(@(t,y) mapk_cascade_DAE(y, BRAF_tot, ATP_tot, DBF_in, TMT_in), tspan, y0, options);
+                yperk = y(end,22);
+                ypperk = y(end,26);
+                dbfresponse(d)=(yperk+ypperk)/1.2;
+            end
+                
+            %%% compute rmse
+            ymodelvector = zeros(1,length(ydata));
+            for yi = 1:length(ymodelvector)
+                ymodelvector(yi) = (dbfresponse(rmse_xcheckpoints(yi)-1) + dbfresponse(rmse_xcheckpoints(yi)) )/2;
+            end
+
+            rmse = sqrt(mean((ydata(:)- ymodelvector(:)).^2));
+            resultMatrix(mrow,:)=[setEndTime(vT), vB, vA, rmse];
+            mrow=mrow+1;
+            %%%
+
+%             dbfresponse=dbfresponse/dbfresponse(1);
+%             hold on
+%             plot(dbfdose,dbfresponse,'LineWidth',2)
+        end
+
+    end
+end
+
+
+
+%[ng]=[mol/liter]*[mL]*[g/mol]*1000(to make it nano)
+%effconc = dbfdose*0.001*519.6*1000;
+%[0:200:1000]/(0.001*519.6*1000);
+
+ 
+% yticks([0:0.2:1])
+% yticklabels({'-100','-80','-60','-40','-20','0'})
+% ylim([0 1])
+% xticks([0:200:1000]/(0.001*519.6*1000))
+% xticklabels({'0','200','400','600','800','1000'})
+% xlim([0 dbfdose(end)])
+% xlabel('Dabrafenib concebtration (ng/mL)','FontSize',18)
+% ylabel('Change in phosphorylated ERK','FontSize',18)
+
+
+%https://apps.automeris.io/wpd/
+
+
+
+% hold on
+% scatter(xdata,ydata,'k','LineWidth',2)
+
+% 
+% hold on
+% dbfeff=1:1:1000;%dbfdose*(0.001*519.6*1000);
+% Emax=1;
+% ic50=134;
+% resp = 100.*(1-Emax.*dbfeff./(ic50+dbfeff));
+% 
+% dbfeff_mod = dbfeff/(0.001*519.6*1000);
+% resp_mod=resp/100;
+% 
+% plot(dbfeff_mod,resp_mod,'k--','LineWidth',2)
+
+% hold on
+% dbfeff=dbfdose*(0.001*519.6*1000);
+% ic50=134;
+% Emax=1;
+% resp = 1.*(1-Emax.*dbfeff./(ic50+dbfeff));
+% resp=resp/100;
+% plot(dbfdose,resp,'k--')
+
+% legend('1','2','3','4','5','6','observed by [ref]','predicted by [ref]')
+%,...
+ %    'Position',[0 100 0 50],'Orientation','horizontal','FontSize',16)
