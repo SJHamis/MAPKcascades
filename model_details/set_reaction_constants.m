@@ -1,4 +1,4 @@
-function [reaction_constants] =  set_reaction_constants()
+function [reaction_constants] =  set_reaction_constants()%
 
 total_concentrations = ["BRAF_tot=BRAF_in;"
     "ATP_tot=ATP_in;"

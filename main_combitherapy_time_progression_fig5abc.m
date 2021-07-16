@@ -2,7 +2,7 @@
 dae_location = strcat(pwd,'/auxiliary_files_model_setup');
 addpath(dae_location);
 %Add a path to the directory that auxilary plotfiles
-plot_location = strcat(pwd,'/auxilary_files_plots');
+plot_location = strcat(pwd,'/auxiliary_files_plots');
 addpath(plot_location);
 
 DBF_min=0;
