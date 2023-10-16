@@ -10,19 +10,19 @@ plot_location = strcat(pwd,'/auxiliary_files_plots');
 addpath(plot_location);
 
 DBF_min=0;
-DBF_max=2;
+DBF_max=4;
 DBF_n=40;
 DBF_h=(DBF_max-DBF_min)/DBF_n;
 DBF_range=DBF_min:DBF_h:DBF_max;
 
 TMT_min=0;
-TMT_max=2;
+TMT_max=4;
 TMT_n=40;
 TMT_h=(TMT_max-TMT_min)/TMT_n;
 TMT_range=TMT_min:TMT_h:TMT_max;
 
 SCH_min=0;
-SCH_max=2;
+SCH_max=4;
 SCH_n=40;
 SCH_h=(SCH_max-SCH_min)/SCH_n;
 SCH_range=SCH_min:SCH_h:SCH_max;
@@ -30,9 +30,9 @@ SCH_range=SCH_min:SCH_h:SCH_max;
 SCH_concentration=zeros(length(TMT_range),length(DBF_range));
 
 userinput_BRAF_tot = 0.003; % change to investigate other BRAF concentrations
-userinput_ATP_tot = 1000; % change to investigate other ATP concentrations
-tend = 8; % in hours
-IC_in = 25; % change for IC25, IC50, and IC75
+userinput_ATP_tot = 5000; % change to investigate other ATP concentrations
+tend = 24; % in hours
+IC_in = 75; % change for IC25, IC50, and IC75
 
 
 % draw three-drug combination surface
@@ -55,6 +55,7 @@ set(gcf,'position',[100,100,1200,700])
     end
 
 surf(TMT_range, DBF_range, SCH_concentration);
+pbaspect([1 1 1]);
 ax = get(gca,'Clim');
 
 hold on
@@ -91,7 +92,7 @@ synergy_plane = (-1/C)*(A*X + B*Y + D); % synergy plane
 surf(TMT_range, DBF_range, synergy_plane, ...
     'FaceColor','red', 'FaceAlpha',0.5, 'EdgeColor','none');
 
-axis([0 2 0 2 0 2])
+axis([0 4 0 4 0 4])
 set(gca,'Clim',ax);
 
 grid on
@@ -100,4 +101,4 @@ ylabel('DBF (\muM)' ,'FontSize',14)
 set(gca, 'YDir','reverse')
 zlabel('SCH (\muM)', 'FontSize',14)
 
-title({'IC_{25} : BRAF = 3 nM, ATP = 5 mM; 8 h'}, 'FontSize', 14)
+title({'IC_{75} : BRAF = 3 nM, ATP = 5 mM; 24 h'}, 'FontSize', 14)
