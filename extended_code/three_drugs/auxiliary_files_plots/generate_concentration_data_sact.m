@@ -1,4 +1,4 @@
-function act_fraction_o = generate_concentration_data_sact(BRAF_in, ATP_in, DBF_in, TMT_in, SCH_in, tend)
+function act_fraction_sub = generate_concentration_data_sact(BRAF_in, ATP_in, DBF_in, TMT_in, SCH_in, tend)
 
 %Add a path to the directory that contains the system of reactions (model 
 % structure) and model parameters.
@@ -22,7 +22,7 @@ BRAF_tot=BRAF_in;
 ATP_tot=ATP_in;
 MEK_tot=1.2;
 ERK_tot=1.2;
-O_tot=1.2;
+SUB_tot=1.2;
 phosph1_tot=0.0003;
 phosph2_tot=0.12;
 phosph3_tot=0.12;
@@ -35,7 +35,7 @@ y0(1)=BRAF_tot;%braf
 y0(2)=ATP_tot;%atp
 y0(4)=MEK_tot;%mek
 y0(20)=ERK_tot; %erk
-y0(38)=O_tot;%substrate o
+y0(38)=SUB_tot;%substrate sub
 y0(12)=phosph1_tot;%phosph1
 y0(27)=phosph2_tot;%phos2
 y0(45)=phosph3_tot;%phos3
@@ -47,7 +47,7 @@ options = odeset('Mass',M,'MassSingular','yes', 'RelTol',1e-3,'AbsTol',1e-3);%,'
 
 [~,y] = ode15s(@(t,y) mapk_cascade_DAE(y, BRAF_in, ATP_in, DBF_in, TMT_in, SCH_in), tspan, y0, options);
 
-%Activated fraction of substrate O at steady state: ;
-act_fraction_o=[(y(end,40)+y(end,44))/O_tot];
+%Activated fraction of substrate SUB at steady state: ;
+act_fraction_sub=[(y(end,40)+y(end,44))/SUB_tot];
 
 end

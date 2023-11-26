@@ -34,7 +34,7 @@ y0(1)=BRAF_tot;%braf
 y0(2)=ATP_tot;%atp
 y0(4)=MEK_tot;%mek
 y0(20)=ERK_tot; %erk
-y0(38)=SUB_tot;%substrate sub
+y0(38)=SUB_tot;%substrate o
 y0(12)=phosph1_tot;%phosph1
 y0(27)=phosph2_tot;%phos2
 y0(45)=phosph3_tot;%phos3
@@ -158,24 +158,24 @@ while monotherapy_points(3,3) == 0
         previous_ysubact = ysubact;
         previous_SCH = SCH_in;
         SCH_in = SCH_in+1;
-    elseif ysubact <= IC_in && stage==1
+    elseif yoact <= IC_in && stage==1
         SCH_in=previous_SCH;
         stage=2;
 
-    elseif ysubact > IC_in && stage==2
-        previous_ysubact = ysubact;
+    elseif yoact > IC_in && stage==2
+        previous_yoact = yoact;
         previous_SCH = SCH_in;
         SCH_in = SCH_in+0.1;
-    elseif ysubact <= IC_in && stage==2
+    elseif yoact <= IC_in && stage==2
         SCH_in=previous_SCH;
         stage=3;
 
-    elseif ysubact > IC_in && stage==3
-        previous_ysubact = ysubact;
+    elseif yoact > IC_in && stage==3
+        previous_yoact = yoact;
         previous_SCH = SCH_in;
         SCH_in = SCH_in+0.01;
-    elseif ysubact <= IC_in && stage==3
-        if abs(previous_ysubact-0.25) <= abs(ysubact-0.25)
+    elseif yoact <= IC_in && stage==3
+        if abs(previous_yoact-0.25) <= abs(yoact-0.25)
             monotherapy_points(3,3) = previous_SCH;
             y0(48) = SCH_tot;
         else
@@ -188,3 +188,6 @@ end
 monotherapy_dose = monotherapy_points;
 
 end
+
+
+

@@ -4,7 +4,7 @@ BRAF_tot=BRAF_in;
 ATP_tot=ATP_in;
 MEK_tot=1.2;
 ERK_tot=1.2;
-O_tot=1.2;
+SUB_tot=1.2;
 phosph1_tot=0.0003;
 phosph2_tot=0.12;
 phosph3_tot=0.12;
@@ -33,7 +33,7 @@ d8=0.0012296; % TMT binding to MEK (or MEK complex).
 d3=0.0159; % BRAF phosphasate.
 d7=0.0159; % MEK phosphasate.
 d9=14.64; % ATP binding to ERK (or ERK complex).
-d10=0.7738; % S binding to ERK (or ERK complex).
+d10=0.7738; % SUB binding to ERK (or ERK complex).
 d11=0.0159; % ERK phosphatase.
 d12=0.0002967; % SCH binding to ERK (or ERK complex).
 k12=0.66;
@@ -80,7 +80,7 @@ y(30)+y(31)+y(32)+y(33)+y(34)+y(35)+y(36)-TMT_tot
 +y(35)*(-d8)+a8*(y(24)*y(30))+y(35)*(-d5)+a5*(y(33)*y(2))+y(35)*(-d6)+a6*(y(32)*y(20))
 +y(36)*(-d8)+a8*(y(25)*y(30))+y(36)*(-d5)+a5*(y(34)*y(2))+y(36)*(-d6)+a6*(y(32)*y(22))
 +y(37)*(-d9)+a9*(y(26)*y(2))+y(37)*y(38)*(-a10)+d10*y(42)+y(37)*y(40)*(-a10)+d10*y(43)
-y(38)+y(39)+y(40)+y(41)+y(42)+y(43)+y(44)+y(46)+y(47)+y(50)+y(51)-O_tot
+y(38)+y(39)+y(40)+y(41)+y(42)+y(43)+y(44)+y(46)+y(47)+y(50)+y(51)-SUB_tot
 +y(39)*(-d10)+a10*(y(26)*y(38))+y(39)*y(2)*(-a9)+d9*y(42)+y(39)*y(48)*(-a12)+d12*y(50)
 +y(26)*y(40)*(-a10)+d10*y(41)+y(42)*k910+y(37)*y(40)*(-a10)+d10*y(43)+y(42)*k910+y(40)*y(45)*(-a11)+d11*y(46)+y(47)*k11+y(49)*y(40)*(-a10)+d10*y(51)
 +y(41)*(-d10)+a10*(y(26)*y(40))+y(41)*y(2)*(-a9)+d9*y(43)+y(41)*y(48)*(-a12)+d12*y(51)

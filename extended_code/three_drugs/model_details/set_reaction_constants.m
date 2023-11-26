@@ -4,7 +4,7 @@ total_concentrations = ["BRAF_tot=BRAF_in;"
     "ATP_tot=ATP_in;"
     "MEK_tot=1.2;"
     "ERK_tot=1.2;"
-    "O_tot=1.2;"   % O = dummy substrate
+    "SUB_tot=1.2;"   % SUB = dummy substrate
     "phosph1_tot=0.0003;"
     "phosph2_tot=0.12;"
     "phosph3_tot=0.12;"  
@@ -35,9 +35,9 @@ d_backward_constants = ["d1=6.23; %0.8268; % ATP binding to BRAF (or BRAF comple
 "d3=0.0159; % BRAF phosphasate."
 "d7=0.0159; % MEK phosphasate."
 "d9=14.64; % ATP binding to ERK (or ERK complex)."
-"d10=0.7738; % S binding to ERK (or ERK complex)."
+"d10=0.7738; % SUB binding to ERK (or ERK complex)."
 "d11=0.0159; % ERK phosphatase."
-"d12=0.002967; % SCH binding to ERK (or ERK complex)."];  
+"d12=0.0002967; % SCH binding to ERK (or ERK complex)."];  
 
 k_cat_constants = ["k12=0.66;"
 "k56=0.0242;"

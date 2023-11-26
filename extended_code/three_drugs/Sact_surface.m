@@ -30,9 +30,9 @@ SCH_range=SCH_min:SCH_h:SCH_max;
 SCH_concentration=zeros(length(TMT_range),length(DBF_range));
 
 userinput_BRAF_tot = 0.003; % change to investigate other BRAF concentrations
-userinput_ATP_tot = 5000; % change to investigate other ATP concentrations
-tend = 24; % in hours
-IC_in = 75; % change for IC25, IC50, and IC75
+userinput_ATP_tot = 1000; % change to investigate other ATP concentrations
+tend = 8; % in hours
+IC_in = 25; % change for IC25, IC50, and IC75
 
 
 % draw three-drug combination surface
@@ -101,4 +101,4 @@ ylabel('DBF (\muM)' ,'FontSize',14)
 set(gca, 'YDir','reverse')
 zlabel('SCH (\muM)', 'FontSize',14)
 
-title({'IC_{75} : BRAF = 3 nM, ATP = 5 mM; 24 h'}, 'FontSize', 14)
+title({'IC_{25} : BRAF = 3 nM, ATP = 1 mM; 8 h'}, 'FontSize', 14)

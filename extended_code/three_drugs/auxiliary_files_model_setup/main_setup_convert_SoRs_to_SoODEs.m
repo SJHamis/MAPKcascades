@@ -103,7 +103,7 @@ srmf_text = split(system_of_reactions);
 
 % We now incorporate the conservations laws associated with the SoRs.
 % In out specific case, note that the total amount of 
-% BRAF, MEK, ERK, O, ATP, phosph1, phosph2, phosph3, DBF, TMT, SCH (in 
+% BRAF, MEK, ERK, SUB, ATP, phosph1, phosph2, phosph3, DBF, TMT, SCH (in 
 % bound and unbound form) is conserved.
 % For example, [BRAF]+[BRAF_A]+[BRAF_B] = constant = BRAF_tot,
 % (or  d[BRAF]/dt + d[BRAF_A]/dt + d[BRAF_B]/dt = 0).
@@ -112,7 +112,7 @@ srmf_text = split(system_of_reactions);
 
 % We create a list of "super-compounds", containing every conservation-law
 % related total-concentration-constant.
-list_of_super_compounds=["BRAF";"MEK";"ERK";"O";"ATP";"DBF";...
+list_of_super_compounds=["BRAF";"MEK";"ERK";"SUB";"ATP";"DBF";...
     "TMT";"SCH";"phosph1";"phosph2";"phosph3"];
 
 % Now find all sub-compounds to each super-compound by scanning through the

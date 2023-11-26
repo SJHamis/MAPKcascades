@@ -33,7 +33,7 @@ userinput_ATP_tot = 1000;
 tend=[8 16 24];%in hours
 
 set(gcf,'position',[800,1000,800,800])
-tiles = tiledlayout(3,3,'TileSpacing','compact');
+tiles = tiledlayout(3,3,'TileSpacing','tight');
 sp=1;
 for row = 1:3
 
@@ -51,14 +51,16 @@ for row = 1:3
             ylabel('TMT (\muM)' ,'FontSize',16)
             xlim([0 5])
             ylim([0 5])
+            xticks([0 2 4])
+            xticklabels({'0','2','4'})
+            yticks([0 2 4])
+            yticklabels({'0','2','4'})
+
             pbaspect([1 1 1]);
             view(2)
         
             if col==1
                 title('8 h','FontSize',18)
-                annotation('textbox', [0.2, 0.3, 0.1, 0.1], 'String','BRAF = 3 nM, nATP = 1 mM', ...
-                'EdgeColor','none', 'FontSize', 20, ...
-                'HorizontalAlignment', 'center', 'VerticalAlignment','middle', 'Rotation',90);
             elseif col==2
                 title('16 h','FontSize',18)
             elseif col==3
@@ -81,6 +83,10 @@ for row = 1:3
             ylabel('SCH (\muM)' ,'FontSize',16)
             xlim([0 5])
             ylim([0 5])
+            xticks([0 2 4])
+            xticklabels({'0','2','4'})
+            yticks([0 2 4])
+            yticklabels({'0','2','4'})
             pbaspect([1 1 1]);
             view(2)
         
@@ -108,6 +114,10 @@ for row = 1:3
             ylabel('SCH (\muM)' ,'FontSize',16)
             xlim([0 5])
             ylim([0 5])
+            xticks([0 2 4])
+            xticklabels({'0','2','4'})
+            yticks([0 2 4])
+            yticklabels({'0','2','4'})
             pbaspect([1 1 1]);
             view(2)
         
