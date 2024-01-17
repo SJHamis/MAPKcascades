@@ -85,7 +85,7 @@ while monotherapy_points(1,1) == 0
         previous_TMT = TMT_in;
         TMT_in = TMT_in+0.01;
     elseif ysubact <= IC_in && stage==3
-        if abs(previous_ysubact-0.25) <= abs(ysubact-0.25)
+        if abs(previous_ysubact-IC_in) <= abs(ysubact-IC_in)
             monotherapy_points(1,1) = previous_TMT;
             y0(30) = TMT_tot;
         else
@@ -130,7 +130,7 @@ while monotherapy_points(2,2) == 0
         previous_DBF = DBF_in;
         DBF_in = DBF_in+0.01;
     elseif ysubact <= IC_in && stage==3
-        if abs(previous_ysubact-0.25) <= abs(ysubact-0.25)
+        if abs(previous_ysubact-IC_in) <= abs(ysubact-IC_in)
             monotherapy_points(2,2) = previous_DBF;
             y0(15) = DBF_tot;
         else
@@ -175,7 +175,7 @@ while monotherapy_points(3,3) == 0
         previous_SCH = SCH_in;
         SCH_in = SCH_in+0.01;
     elseif ysubact <= IC_in && stage==3
-        if abs(previous_ysubact-0.25) <= abs(ysubact-0.25)
+        if abs(previous_ysubact-IC_in) <= abs(ysubact-IC_in)
             monotherapy_points(3,3) = previous_SCH;
             y0(48) = SCH_tot;
         else

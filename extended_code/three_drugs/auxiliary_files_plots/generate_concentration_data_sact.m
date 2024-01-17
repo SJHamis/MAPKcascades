@@ -5,7 +5,7 @@ function act_fraction_sub = generate_concentration_data_sact(BRAF_in, ATP_in, DB
 dae_location = strcat(pwd,'/auxiliary_files_model_setup');
 addpath(dae_location);
 
-M = eye(51);
+M = eye(46);
 super_compound_list_index=get_conslaw_position();
 
 %Substitute in cons. laws 
@@ -38,16 +38,16 @@ y0(20)=ERK_tot; %erk
 y0(38)=SUB_tot;%substrate sub
 y0(12)=phosph1_tot;%phosph1
 y0(27)=phosph2_tot;%phos2
-y0(45)=phosph3_tot;%phos3
+y0(42)=phosph3_tot;%phos3
 y0(15)=DBF_tot; %dbf
 y0(30)=TMT_tot; %tmt
-y0(48)=SCH_tot; %sch772984
+y0(44)=SCH_tot; %sch772984
 
 options = odeset('Mass',M,'MassSingular','yes', 'RelTol',1e-3,'AbsTol',1e-3);%,'Vectorized','on');
 
 [~,y] = ode15s(@(t,y) mapk_cascade_DAE(y, BRAF_in, ATP_in, DBF_in, TMT_in, SCH_in), tspan, y0, options);
 
-%Activated fraction of substrate SUB at steady state: ;
-act_fraction_sub=[(y(end,40)+y(end,44))/SUB_tot];
+%Activated fraction of substrate SUB (unbound pSUB) at steady state:
+act_fraction_sub=y(end,41)/SUB_tot;
 
 end

@@ -10,19 +10,19 @@ plot_location = strcat(pwd,'/auxiliary_files_plots');
 addpath(plot_location);
 
 DBF_min=0;
-DBF_max=5;%10;
+DBF_max=5;
 DBF_n=50;
 DBF_h=(DBF_max-DBF_min)/DBF_n;
 DBF_range=DBF_min:DBF_h:DBF_max;
 
 TMT_min=0;
-TMT_max=5;%10;
+TMT_max=5;
 TMT_n=50;
 TMT_h=(TMT_max-TMT_min)/TMT_n;
 TMT_range=TMT_min:TMT_h:TMT_max;
 
 SCH_min=0;
-SCH_max=5;%2.5;
+SCH_max=5;
 SCH_n=50;
 SCH_h=(SCH_max-SCH_min)/SCH_n;
 SCH_range=SCH_min:SCH_h:SCH_max;

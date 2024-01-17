@@ -5,7 +5,7 @@ function monotherapy_dose = generate_monotherapy_dose_data(BRAF_in, ATP_in, IC_i
 dae_location = strcat(pwd,'/auxiliary_files_model_setup');
 addpath(dae_location);
 
-M = eye(51);
+M = eye(46);
 super_compound_list_index=get_conslaw_position();
 
 %Substitute in cons. laws 
@@ -36,11 +36,11 @@ y0(4)=MEK_tot;%mek
 y0(20)=ERK_tot; %erk
 y0(38)=SUB_tot;%substrate sub
 y0(12)=phosph1_tot;%phosph1
-y0(27)=phosph2_tot;%phos2
-y0(45)=phosph3_tot;%phos3
+y0(27)=phosph2_tot;%phosph2
+y0(42)=phosph3_tot;%phosph3
 y0(15)=DBF_tot; %dbf
 y0(30)=TMT_tot; %tmt
-y0(48)=SCH_tot; %sch772984
+y0(44)=SCH_tot; %sch772984
 
 IC_in = IC_in/100;
 
@@ -58,9 +58,7 @@ stage = 1;  % used to speed up code
 while monotherapy_points(1,1) == 0
     y0(30) = TMT_in;
     [t,y] = ode15s(@(t,y) mapk_cascade_DAE(y, BRAF_in, ATP_in, DBF_tot, TMT_in, SCH_tot), tspan, y0, options);
-    ypsub = y(:,40)/1.2;
-    yppsub = y(:,44)/1.2;
-    ysubact = ypsub+yppsub;
+    ysubact = y(:,41)/1.2;
     t_index = find(t==tend*3600);
     ysubact = ysubact(t_index);
 
@@ -85,7 +83,7 @@ while monotherapy_points(1,1) == 0
         previous_TMT = TMT_in;
         TMT_in = TMT_in+0.01;
     elseif ysubact <= IC_in && stage==3
-        if abs(previous_ysubact-0.25) <= abs(ysubact-0.25)
+        if abs(previous_ysubact-IC_in) <= abs(ysubact-IC_in)
             monotherapy_points(1,1) = previous_TMT;
             y0(30) = TMT_tot;
         else
@@ -103,9 +101,7 @@ stage = 1;  % used to speed up code
 while monotherapy_points(2,2) == 0
     y0(15) = DBF_in;
     [t,y] = ode15s(@(t,y) mapk_cascade_DAE(y, BRAF_in, ATP_in, DBF_in, TMT_tot, SCH_tot), tspan, y0, options);
-    ypsub = y(:,40)/1.2;
-    yppsub = y(:,44)/1.2;
-    ysubact = ypsub+yppsub;
+    ysubact = y(:,41)/1.2;
     t_index = find(t==tend*3600);
     ysubact = ysubact(t_index);
 
@@ -130,7 +126,7 @@ while monotherapy_points(2,2) == 0
         previous_DBF = DBF_in;
         DBF_in = DBF_in+0.01;
     elseif ysubact <= IC_in && stage==3
-        if abs(previous_ysubact-0.25) <= abs(ysubact-0.25)
+        if abs(previous_ysubact-IC_in) <= abs(ysubact-IC_in)
             monotherapy_points(2,2) = previous_DBF;
             y0(15) = DBF_tot;
         else
@@ -146,11 +142,9 @@ SCH_in = SCH_tot;
 stage = 1;  % used to speed up code
 
 while monotherapy_points(3,3) == 0
-    y0(48) = SCH_in;
+    y0(44) = SCH_in;
     [t,y] = ode15s(@(t,y) mapk_cascade_DAE(y, BRAF_in, ATP_in, DBF_tot, TMT_tot, SCH_in), tspan, y0, options);
-    ypsub = y(:,40)/1.2;
-    yppsub = y(:,44)/1.2;
-    ysubact = ypsub+yppsub;
+    ysubact = y(:,41)/1.2;
     t_index = find(t==tend*3600);
     ysubact = ysubact(t_index);
 
@@ -175,12 +169,12 @@ while monotherapy_points(3,3) == 0
         previous_SCH = SCH_in;
         SCH_in = SCH_in+0.01;
     elseif ysubact <= IC_in && stage==3
-        if abs(previous_ysubact-0.25) <= abs(ysubact-0.25)
+        if abs(previous_ysubact-IC_in) <= abs(ysubact-IC_in)
             monotherapy_points(3,3) = previous_SCH;
-            y0(48) = SCH_tot;
+            y0(44) = SCH_tot;
         else
             monotherapy_points(3,3) = SCH_in;
-            y0(48) = SCH_tot;
+            y0(44) = SCH_tot;
         end   
     end
 end

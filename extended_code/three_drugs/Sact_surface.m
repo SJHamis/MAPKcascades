@@ -11,19 +11,19 @@ addpath(plot_location);
 
 DBF_min=0;
 DBF_max=4;
-DBF_n=40;
+DBF_n=10;
 DBF_h=(DBF_max-DBF_min)/DBF_n;
 DBF_range=DBF_min:DBF_h:DBF_max;
 
 TMT_min=0;
 TMT_max=4;
-TMT_n=40;
+TMT_n=10;
 TMT_h=(TMT_max-TMT_min)/TMT_n;
 TMT_range=TMT_min:TMT_h:TMT_max;
 
 SCH_min=0;
 SCH_max=4;
-SCH_n=40;
+SCH_n=10;
 SCH_h=(SCH_max-SCH_min)/SCH_n;
 SCH_range=SCH_min:SCH_h:SCH_max;
 
@@ -31,8 +31,8 @@ SCH_concentration=zeros(length(TMT_range),length(DBF_range));
 
 userinput_BRAF_tot = 0.003; % change to investigate other BRAF concentrations
 userinput_ATP_tot = 1000; % change to investigate other ATP concentrations
-tend = 8; % in hours
-IC_in = 25; % change for IC25, IC50, and IC75
+tend = 3; % in hours
+IC_in = 10; % change for IC10, IC25, IC50, and IC75
 
 
 % draw three-drug combination surface
@@ -101,4 +101,4 @@ ylabel('DBF (\muM)' ,'FontSize',14)
 set(gca, 'YDir','reverse')
 zlabel('SCH (\muM)', 'FontSize',14)
 
-title({'IC_{25} : BRAF = 3 nM, ATP = 1 mM; 8 h'}, 'FontSize', 14)
+title({'IC_{25} : BRAF = 3 nM, ATP = 1 mM; 24 h'}, 'FontSize', 14)

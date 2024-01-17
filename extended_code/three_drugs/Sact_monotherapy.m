@@ -5,7 +5,7 @@ clear all
 dae_location = strcat(pwd,'/auxiliary_files_model_setup');
 addpath(dae_location);
 
-M = eye(51);
+M = eye(46);
 super_compound_list_index=get_conslaw_position();
 %Substitute in cons. laws 
 for i=1:size(M,1)
@@ -28,7 +28,7 @@ y0(20)=ERK_tot;
 y0(38)=SUB_tot;
 y0(12)=phosph1_tot;
 y0(27)=phosph2_tot;
-y0(45)=phosph3_tot;
+y0(42)=phosph3_tot;
 
 DBF_min = 0;
 DBF_max = 10;
@@ -49,7 +49,7 @@ options = odeset('Mass',M, 'MassSingular','yes', 'RelTol',1e-3, 'AbsTol',1e-3);
 set(gcf,'Position',[100,100,1000,1000])
 newcolors = {'#EDB120','#7E2F8E','#77AC30','#D95319','#0072BD'};
 
-%%%%%%%%%%%%%%%%%%%%%%% Generate activated substrate SUB (pSUB + ppSUB) vs monotherapy (DBF, TMT, SCH) FIGURE for different t values
+%%%%%%%%%%%%%%%%%%%%%%% Generate activated substrate SUB (unbound pSUB) vs monotherapy (DBF, TMT, SCH) FIGURE for different t values
 tiles = tiledlayout(3,4, TileSpacing="compact", Padding="loose"); 
 
 BRAF_tot=[0.003,0.01,0.003,0.01, 0.003,0.01,0.003,0.01, 0.003,0.01,0.003,0.01];
@@ -65,9 +65,9 @@ for k = 1:12
 
     if k <= 4  % plotting for DBF monotherapy
 
-        output_data = zeros(4,length(DBF_vector));   % storage matrix for plot results
+        output_data = zeros(4,length(DBF_vector));   % storage matrix to plot results
         y0(30)=0;
-        y0(48)=0;
+        y0(44)=0;
         index = 1;  % to update the output_data matrix
 
         for i = [3 8 16 24]
@@ -79,9 +79,7 @@ for k = 1:12
                 DBF_in = y0(15);
             
                 [t,y] = ode15s(@(t,y) mapk_cascade_DAE(y, BRAF_tot(k), ATP_tot(k), DBF_in, 0, 0), tspan, y0, options);
-                ypsub = y(:,40)/1.2;
-                yppsub = y(:,44)/1.2;
-                ysubact = (ypsub+yppsub);
+                ysubact = y(:,41)/1.2;
 
                 output_data(index,j) = ysubact(end);
             end
@@ -89,13 +87,13 @@ for k = 1:12
             index = index+1;
         end
 
-        plot(DBF_vector,output_data(1,:),'LineWidth',4);  % plot for 3 hour
+        plot(DBF_vector,output_data(1,:),'LineWidth',4);  % plot after 3 hours
         hold on
-        plot(DBF_vector,output_data(2,:),'LineWidth',3);  % plot for 8 hour
+        plot(DBF_vector,output_data(2,:),'LineWidth',3);  % plot after 8 hours
         hold on
-        plot(DBF_vector,output_data(3,:),'LineWidth',2);  % plot for 16 hour
+        plot(DBF_vector,output_data(3,:),'LineWidth',2);  % plot after 16 hours
         hold on
-        plot(DBF_vector,output_data(4,:),'LineWidth',1);  % plot for 24 hour
+        plot(DBF_vector,output_data(4,:),'LineWidth',1);  % plot after 24 hours
         clear t y
     
         xticks([0 5 10])
@@ -136,7 +134,7 @@ for k = 1:12
 
         output_data = zeros(4,length(TMT_vector));   % storage matrix for plot results
         y0(15)=0;
-        y0(48)=0;
+        y0(44)=0;
         index = 1;  % to update the output_data matrix
 
         for i = [3 8 16 24]
@@ -148,9 +146,7 @@ for k = 1:12
                 TMT_in = y0(30);
             
                 [t,y] = ode15s(@(t,y) mapk_cascade_DAE(y, BRAF_tot(k), ATP_tot(k), 0, TMT_in, 0), tspan, y0, options);
-                ypsub = y(:,40)/1.2;
-                yppsub = y(:,44)/1.2;
-                ysubact = (ypsub+yppsub);
+                ysubact = y(:,41)/1.2;
 
                 output_data(index,j) = ysubact(end);
             end
@@ -203,14 +199,12 @@ for k = 1:12
 
             for j = 1:length(SCH_vector)
 
-                y0(48)=SCH_vector(j);
-                SCH_in = y0(48);
+                y0(44)=SCH_vector(j);
+                SCH_in = y0(44);
             
                 [t,y] = ode15s(@(t,y) mapk_cascade_DAE(y, BRAF_tot(k), ATP_tot(k), 0, 0, SCH_in), tspan, y0, options);
-                ypsub = y(:,40)/1.2;
-                yppsub = y(:,44)/1.2;
-                ysubact = (ypsub+yppsub);
-
+                ysubact = y(:,41)/1.2;
+       
                 output_data(index,j) = ysubact(end);
             end
 
