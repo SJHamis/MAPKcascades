@@ -34,8 +34,8 @@ d_backward_constants = ["d1=6.23; %0.8268; % ATP binding to BRAF (or BRAF comple
 "d8=0.0012296; % TMT binding to MEK (or MEK complex)."
 "d3=0.0159; % BRAF phosphasate."
 "d7=0.0159; % MEK phosphasate."
-"d9=14.64; % ATP binding to ERK (or ERK complex)."
-"d10=0.7738; % SUB binding to ERK (or ERK complex)."
+"d9=14.84; % ATP binding to ERK (or ERK complex)."
+"d10=0.000421; % SUB binding to ERK (or ERK complex)."
 "d11=0.0159; % ERK phosphatase."
 "d12=0.0002967; % SCH binding to ERK (or ERK complex)."];  
 
@@ -43,7 +43,7 @@ k_cat_constants = ["k12=0.66;"
 "k56=0.0242;"
 "k3=0.0159;"
 "k7=0.0159;"
-"k910=0.2;"
+"k910=0.000639;"
 "k11=0.0159;"];   
    
 reaction_constants=[total_concentrations; a_forward_constants;...
