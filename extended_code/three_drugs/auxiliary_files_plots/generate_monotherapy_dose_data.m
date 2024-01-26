@@ -42,11 +42,11 @@ y0(15)=DBF_tot; %dbf
 y0(30)=TMT_tot; %tmt
 y0(44)=SCH_tot; %sch772984
 
-IC_in = IC_in/100;
-
 options = odeset('Mass',M,'MassSingular','yes', 'RelTol',1e-3,'AbsTol',1e-3);%,'Vectorized','on');
 
 monotherapy_points = zeros(3);
+
+IC_in = generate_ic_data(BRAF_tot,ATP_tot,IC_in,tend);
 
 
 % Generate monotherapy doses for DBF, TMT, and SCH772984
@@ -67,7 +67,9 @@ while monotherapy_points(1,1) == 0
         previous_TMT = TMT_in;
         TMT_in = TMT_in+1;
     elseif ysubact <= IC_in && stage==1
-        TMT_in=previous_TMT;
+        if TMT_in>0
+            TMT_in=previous_TMT;
+        end
         stage=2;
 
     elseif ysubact > IC_in && stage==2
@@ -75,7 +77,9 @@ while monotherapy_points(1,1) == 0
         previous_TMT = TMT_in;
         TMT_in = TMT_in+0.1;
     elseif ysubact <= IC_in && stage==2
-        TMT_in=previous_TMT;
+        if TMT_in>0
+            TMT_in=previous_TMT;
+        end
         stage=3;
 
     elseif ysubact > IC_in && stage==3
@@ -110,7 +114,9 @@ while monotherapy_points(2,2) == 0
         previous_DBF = DBF_in;
         DBF_in = DBF_in+1;
     elseif ysubact <= IC_in && stage==1
-        DBF_in=previous_DBF;
+        if DBF_in>0
+            DBF_in=previous_DBF;
+        end
         stage=2;
 
     elseif ysubact > IC_in && stage==2
@@ -118,7 +124,9 @@ while monotherapy_points(2,2) == 0
         previous_DBF = DBF_in;
         DBF_in = DBF_in+0.1;
     elseif ysubact <= IC_in && stage==2
-        DBF_in=previous_DBF;
+        if DBF_in>0
+            DBF_in=previous_DBF;
+        end
         stage=3;
 
     elseif ysubact > IC_in && stage==3
@@ -153,7 +161,9 @@ while monotherapy_points(3,3) == 0
         previous_SCH = SCH_in;
         SCH_in = SCH_in+1;
     elseif ysubact <= IC_in && stage==1
-        SCH_in=previous_SCH;
+        if SCH_in>0
+            SCH_in=previous_SCH;
+        end
         stage=2;
 
     elseif ysubact > IC_in && stage==2
@@ -161,7 +171,9 @@ while monotherapy_points(3,3) == 0
         previous_SCH = SCH_in;
         SCH_in = SCH_in+0.1;
     elseif ysubact <= IC_in && stage==2
-        SCH_in=previous_SCH;
+        if SCH_in>0
+            SCH_in=previous_SCH;
+        end
         stage=3;
 
     elseif ysubact > IC_in && stage==3
