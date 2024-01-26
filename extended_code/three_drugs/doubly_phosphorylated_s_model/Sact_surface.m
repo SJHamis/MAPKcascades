@@ -34,6 +34,7 @@ userinput_ATP_tot = 1000; % change to investigate other ATP concentrations
 tend = 3; % in hours
 IC_in = 10; % change for IC10, IC25, IC50, and IC75
 
+IC_new = generate_ic_data(userinput_BRAF_tot,userinput_ATP_tot,IC_in,tend);
 
 % draw three-drug combination surface
 
@@ -43,9 +44,9 @@ set(gcf,'position',[100,100,1200,700])
                 for i_TMT = 1:length(TMT_range)
                     timepoint_concentration = generate_concentration_data_sact(userinput_BRAF_tot, userinput_ATP_tot,...
                         DBF_range(i_DBF), TMT_range(i_TMT), SCH_range(i_SCH), tend);
-                    if i_SCH == 1 && timepoint_concentration <= IC_in/100
+                    if i_SCH == 1 && timepoint_concentration <= IC_new
                             SCH_concentration(i_DBF, i_TMT) = 100; %dummy value to preserve data for SCH = 0
-                    elseif timepoint_concentration <= IC_in/100 && SCH_concentration(i_DBF, i_TMT) == 0
+                    elseif timepoint_concentration <= IC_new && SCH_concentration(i_DBF, i_TMT) == 0
                         SCH_concentration(i_DBF, i_TMT) = SCH_range(i_SCH);
                     elseif i_SCH == (SCH_n+1) && SCH_concentration(i_DBF,i_TMT) == 100
                         SCH_concentration(i_DBF,i_TMT) = 0; %get SCH=0 back at the end of the loop
