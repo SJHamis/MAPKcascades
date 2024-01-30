@@ -10,20 +10,20 @@ plot_location = strcat(pwd,'/auxiliary_files_plots');
 addpath(plot_location);
 
 DBF_min=0;
-DBF_max=5;
-DBF_n=50;
+DBF_max=4;
+DBF_n=40;
 DBF_h=(DBF_max-DBF_min)/DBF_n;
 DBF_range=DBF_min:DBF_h:DBF_max;
 
 TMT_min=0;
-TMT_max=5;
-TMT_n=50;
+TMT_max=4;
+TMT_n=40;
 TMT_h=(TMT_max-TMT_min)/TMT_n;
 TMT_range=TMT_min:TMT_h:TMT_max;
 
 SCH_min=0;
-SCH_max=5;
-SCH_n=50;
+SCH_max=4;
+SCH_n=40;
 SCH_h=(SCH_max-SCH_min)/SCH_n;
 SCH_range=SCH_min:SCH_h:SCH_max;
 
@@ -45,12 +45,14 @@ for row = 1:3
                             DBF_range(i_DBF), TMT_range(i_TMT), SCH_min, tend(col));
                     end
                 end
+            M = max(timepoint_concentrations, [], 'all');
+            
             nexttile, surf(DBF_range, TMT_range, timepoint_concentrations);       
             grid('on')
             xlabel('DBF (\muM)','FontSize',16)
             ylabel('TMT (\muM)' ,'FontSize',16)
-            xlim([0 5])
-            ylim([0 5])
+            xlim([0 4])
+            ylim([0 4])
             xticks([0 2 4])
             xticklabels({'0','2','4'})
             yticks([0 2 4])
@@ -77,12 +79,16 @@ for row = 1:3
                             DBF_range(i_DBF), TMT_min, SCH_range(i_SCH), tend(col));
                     end
                 end
+            if max(timepoint_concentrations, [], 'all') > M
+                M = max(timepoint_concentrations, [], 'all');
+            end
+
             nexttile, surf(DBF_range, SCH_range, timepoint_concentrations);       
             grid('on')
             xlabel('DBF (\muM)','FontSize',16)
             ylabel('SCH (\muM)' ,'FontSize',16)
-            xlim([0 5])
-            ylim([0 5])
+            xlim([0 4])
+            ylim([0 4])
             xticks([0 2 4])
             xticklabels({'0','2','4'})
             yticks([0 2 4])
@@ -108,12 +114,16 @@ for row = 1:3
                             DBF_min, TMT_range(i_TMT), SCH_range(i_SCH), tend(col));
                     end
                 end
+            if max(timepoint_concentrations, [], 'all') > M
+                M = max(timepoint_concentrations, [], 'all');
+            end
+
             nexttile, surf(TMT_range, SCH_range, timepoint_concentrations);       
             grid('on')
             xlabel('TMT (\muM)','FontSize',16)
             ylabel('SCH (\muM)' ,'FontSize',16)
-            xlim([0 5])
-            ylim([0 5])
+            xlim([0 4])
+            ylim([0 4])
             xticks([0 2 4])
             xticklabels({'0','2','4'})
             yticks([0 2 4])
@@ -132,7 +142,15 @@ for row = 1:3
     end
 
 end
-cb=colorbar('XTick',0:0.5:1, 'Location','eastoutside','Position',[0.93, 0.25, 0.02, 0.55]);
-set(cb,'ylim',[0 1]);
+
+% set up maximum limit for the colourbar
+if M-round(M,1)>0
+    M = round(M,1)+0.1;
+else
+    M=round(M,1);
+end
+
+cb=colorbar('XTick',0:M/2:M, 'Location','eastoutside','Position',[0.93, 0.25, 0.02, 0.55]);
+set(cb,'ylim',[0 M]);
 cb.Title.String = {'Activated','substrate'};
 cb.Title.FontSize = 14;
